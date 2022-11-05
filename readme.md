@@ -1,6 +1,11 @@
 # Michel Douglas Grigoli
 mdgrigoli@hotmail.com.br
 
+## Pré requisitos
+
+Maven: 3\
+Java: 11
+
 ## Execução
 
 Para executar a aplicação, basta executar o comando:
