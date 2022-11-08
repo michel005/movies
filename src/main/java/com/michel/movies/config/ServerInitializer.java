@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.Arrays;
 
 @Slf4j
 @Component
@@ -38,13 +39,36 @@ public class ServerInitializer implements CommandLineRunner {
                                     log.error("[IMPORTING] " + sanityCheckResult);
                                 } else {
                                     String[] fields = line.split(";");
-                                    Movie movie = new Movie();
-                                    movie.setYear(Integer.parseInt(fields[0]));
-                                    movie.setTitle(fields[1]);
-                                    movie.setStudios(fields[2]);
-                                    movie.setProducers(fields[3]);
-                                    movie.setWinner(fields.length >= 5 && fields[4].equalsIgnoreCase("yes"));
-                                    movieRepo.save(movie);
+                                    String[] producers = fields[3].split(",");
+                                    Arrays.stream(producers).forEach(prod -> {
+                                        if (prod.contains(" and ")) {
+                                            String prod1 = prod.split(" and ")[0];
+                                            Movie movie1 = new Movie();
+                                            movie1.setYear(Integer.parseInt(fields[0]));
+                                            movie1.setTitle(fields[1]);
+                                            movie1.setStudios(fields[2]);
+                                            movie1.setProducers(prod1.toUpperCase().trim());
+                                            movie1.setWinner(fields.length >= 5 && fields[4].equalsIgnoreCase("yes"));
+                                            movieRepo.save(movie1);
+
+                                            String prod2 = prod.split(" and ")[1];
+                                            Movie movie2 = new Movie();
+                                            movie2.setYear(Integer.parseInt(fields[0]));
+                                            movie2.setTitle(fields[1]);
+                                            movie2.setStudios(fields[2]);
+                                            movie2.setProducers(prod2.toUpperCase().trim());
+                                            movie2.setWinner(fields.length >= 5 && fields[4].equalsIgnoreCase("yes"));
+                                            movieRepo.save(movie2);
+                                        } else {
+                                            Movie movie = new Movie();
+                                            movie.setYear(Integer.parseInt(fields[0]));
+                                            movie.setTitle(fields[1]);
+                                            movie.setStudios(fields[2]);
+                                            movie.setProducers(prod.toUpperCase().trim());
+                                            movie.setWinner(fields.length >= 5 && fields[4].equalsIgnoreCase("yes"));
+                                            movieRepo.save(movie);
+                                        }
+                                    });
                                 }
                             }
                         }

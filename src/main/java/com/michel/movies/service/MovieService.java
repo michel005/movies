@@ -41,13 +41,6 @@ public class MovieService {
                     current[0].setPreviousWin(movie.getYear());
                 }
             });
-            if (models.size() - sizeBefore[0] < 1) {
-                if (current[0].getFollowingWin() == null) {
-                    current[0].setFollowingWin(LocalDate.now().getYear());
-                    current[0].setInterval(current[0].getFollowingWin() - current[0].getPreviousWin());
-                    models.add(current[0]);
-                }
-            }
         });
         return models.stream().sorted(Comparator.comparing(ProducerModel::getInterval)).collect(Collectors.toList());
     }

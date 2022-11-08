@@ -39,6 +39,16 @@ class MoviesApplicationTests {
     }
 
     @Test
+    public void oficialMovieList() throws Exception {
+        subject.run("movieList.csv");
+        this.mockMvc
+                .perform(get("/movie")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string("{\"max\":[{\"producers\":\"MATTHEW VAUGHN\",\"interval\":13,\"previousWin\":2002,\"followingWin\":2015}],\"min\":[{\"producers\":\"JOEL SILVER\",\"interval\":1,\"previousWin\":1990,\"followingWin\":1991}]}"));
+    }
+
+    @Test
     public void maxIntervalWith10AndMinIntervalWith1() throws Exception {
         subject.run("exemplo1.csv");
         this.mockMvc
